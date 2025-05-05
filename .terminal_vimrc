@@ -1,0 +1,262 @@
+" apply: 
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" curl -fLo ~/.vimrc --create-dirs https://raw.githubusercontent.com/sancppp/.config/main/.terminal_vimrc
+
+" =============================================================================
+" 基本设置 (Basic Settings)
+" =============================================================================
+
+" 设置文件编码为 UTF-8，支持中文显示
+set encoding=utf-8
+" 设置文件在 Vim 中打开时的默认编码
+set fileencoding=utf-8
+" 设置 Vim 保存文件时使用的编码列表
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+" 设置终端编码（如果需要，确保与终端设置一致）
+" set termencoding=utf-8
+
+" 关闭 Vi 兼容模式，启用 Vim 增强功能
+set nocompatible
+
+" 显示行号
+set number
+" 显示相对行号（当前行为绝对行号，其他为相对行号）
+"set relativenumber
+
+" 设置 Tab 键代表的空格数
+set tabstop=2
+" 设置自动缩进时使用的空格数
+set shiftwidth=2
+" 设置软 Tab 宽度（用于可视化模式等操作）
+set softtabstop=2
+
+" 将 Tab 键自动转换为空格
+" set expandtab
+" 不要用空格代替制表符
+set noexpandtab
+
+" 启用智能缩进（根据文件类型自动调整缩进）
+set smartindent
+" 启用自动缩进（新行自动继承上一行的缩进）
+set autoindent
+
+" 设置命令历史记录保存的条数
+set history=1000
+" 关闭创建备份文件
+set nobackup
+" 关闭创建交换文件（注意：关闭后若 Vim 意外退出，可能丢失未保存的更改）
+set noswapfile
+" 启用撤销文件，允许关闭文件后重新打开仍能撤销更改
+set undofile
+" 设置撤销文件的保存目录（确保该目录存在）
+set undodir=~/.vim/undodir
+if !isdirectory(&undodir)
+    call mkdir(&undodir, "p", 0700)
+endif
+
+" =============================================================================
+" 界面设置 (UI Settings)
+" =============================================================================
+
+" 启用语法高亮
+syntax on
+
+" 设置颜色主题（可替换为 'default', 'desert', 'murphy' 等或安装的主题）
+colorscheme default
+" 尝试启用 256 色支持（需要终端支持）
+set t_Co=256
+
+" 高亮显示光标所在的行
+set cursorline
+" 高亮显示光标所在的列（可选）
+" set cursorcolumn
+
+" 高亮显示匹配的括号
+set showmatch
+" 设置匹配括号时短暂跳转的时间（单位：1/10 秒）
+set matchtime=2
+
+" 始终显示状态栏 (0:不显示, 1:仅在多窗口时显示, 2:始终显示)
+set laststatus=2
+" 自定义状态栏显示内容（示例，可根据需要修改）
+" set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime('%c')}
+
+" 在右下角显示光标的行号和列号
+set ruler
+
+" 在状态栏显示部分输入的命令
+set showcmd
+
+" 启用鼠标支持 (a: 所有模式, n: 普通模式, v: 可视模式, i: 插入模式, c: 命令模式)
+set mouse=a
+
+" =============================================================================
+" 编辑设置 (Editing Settings)
+" =============================================================================
+
+" 设置代码折叠方式为基于缩进
+"set foldmethod=indent
+" 设置代码折叠方式为基于语法（通常更准确，但可能影响性能）
+set foldmethod=syntax
+" Vim 启动时默认展开所有折叠
+set foldlevelstart=99
+" 设置显示折叠标记的列宽 (0: 不显示)
+set foldcolumn=0
+
+" 设置自动补全选项
+" menuone: 只有一个候选项时也显示菜单
+" noselect: 不自动选择第一个候选项
+" preview: 在预览窗口显示候选项信息
+set completeopt=menuone,noselect,preview
+
+" 高亮显示行尾多余的空格
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+" 定义快捷键 F5 清除所有行尾空格
+nnoremap <F5> :let _s=@/ <Bar> :%s/\s\+$//e <Bar> :let @/=_s <Bar> :nohl <CR>
+
+" 设置退格键 (backspace) 的行为
+" indent: 允许删除自动缩进
+" eol: 允许删除换行符（合并行）
+" start: 允许删除插入模式开始位置之前的字符
+set backspace=indent,eol,start
+
+" 允许光标在行首/行尾时通过左右方向键换行
+set whichwrap+=<,>,h,l
+
+" 自动换行时保持视觉上的缩进
+set breakindent
+
+" 光标移动到buffer的顶部和底部时保持3行距离
+set scrolloff=3
+
+" =============================================================================
+" 搜索设置 (Search Settings)
+" =============================================================================
+
+" 高亮显示所有搜索匹配项
+set hlsearch
+" 在输入搜索内容时，实时高亮显示匹配项
+set incsearch
+" 搜索时忽略大小写
+set ignorecase
+" 如果搜索模式中包含大写字母，则区分大小写（智能大小写）
+set smartcase
+
+" =============================================================================
+" 插件管理 (Plugin Management)
+" =============================================================================
+" " 指定插件安装目录
+call plug#begin('~/.vim/plugged')
+
+" " 列出需要安装的插件
+Plug 'preservim/nerdtree'         " 文件浏览器
+Plug 'preservim/nerdcommenter'    " 快速注释
+Plug 'vim-airline/vim-airline'    " 状态栏增强
+Plug 'vim-airline/vim-airline-themes' " airline 主题
+Plug 'jiangmiao/auto-pairs'       " 自动补全括号、引号等
+Plug 'tpope/vim-fugitive'         " Git 集成
+" Plug 'tpope/vim-surround'         " 快速操作包围符号
+" Plug 'dense-analysis/ale'         " 异步 Lint/Fix
+
+" " 初始化插件管理器
+call plug#end()
+
+" =============================================================================
+" 快捷键设置 (Key Mappings)
+" =============================================================================
+
+" 设置 Leader 键为空格键（常用于自定义快捷键前缀）
+let mapleader = "\<Space>"
+let g:mapleader = "\<Space>"
+
+" 普通模式快捷键 (nnoremap)
+" 使用 Leader + w 保存文件
+nnoremap <leader>w :w<CR>
+" 使用 Leader + q 关闭当前窗口
+nnoremap <leader>q :q<CR>
+" 使用 Leader + Q 强制关闭当前窗口，不保存
+nnoremap <leader>Q :q!<CR>
+" 使用 Leader + s a 保存所有文件
+nnoremap <leader>sa :wa<CR>
+" 使用 Leader + h/j/k/l 在分割窗口间切换
+nnoremap <leader>h <C-w>h
+nnoremap <leader>j <C-w>j
+nnoremap <leader>k <C-w>k
+nnoremap <leader>l <C-w>l
+" 使用 Leader + v/s 进行垂直/水平分屏
+nnoremap <leader>v :vsp<CR>
+nnoremap <leader>s :sp<CR>
+" 使用 Leader + = 等分窗口大小
+nnoremap <leader>= <C-w>=
+" 使用 Leader + c 关闭当前分屏
+nnoremap <leader>c :close<CR>
+" 使用 Leader + f 查找当前光标下的单词
+nnoremap <leader>f :execute "grep! -R " . expand("<cword>") . " ."<CR>:copen<CR>
+" 使用 Leader + n 清除搜索高亮
+nnoremap <leader>n :nohlsearch<CR>
+
+" 插入模式快捷键 (inoremap)
+" 使用 jj 代替 Esc 退出插入模式（快速输入）
+inoremap jj <Esc>
+
+" 可视模式快捷键 (vnoremap)
+" 在可视模式下，使用 >/< 增加/减少缩进
+vnoremap > >gv
+vnoremap < <gv
+
+" 插件快捷键示例 (需要安装对应插件)
+" " NERDTree: 使用 Ctrl + n 打开/关闭文件浏览器
+" map <C-n> :NERDTreeToggle<CR>
+" " NERDCommenter: 使用 Leader + / 注释/取消注释当前行或选中区域
+" map <leader>/ <plug>NERDCommenterToggle
+" vmap <leader>/ <plug>NERDCommenterToggle
+" " ALE: 使用 Leader + a n/p 跳转到下一个/上一个错误或警告
+" nmap <leader>an <Plug>(ale_next_wrap)
+" nmap <leader>ap <Plug>(ale_previous_wrap)
+
+" =============================================================================
+" 其他设置 (Other Settings)
+" =============================================================================
+
+" 启用拼写检查（可选，需要下载字典）
+" set spell spelllang=en_us " 启用英文拼写检查
+" nnoremap <leader>ss :set spell!<CR> " 使用 Leader + s s 切换拼写检查
+
+" 设置命令行区域的高度（默认为 1）
+set cmdheight=1
+
+" 当文件在 Vim 外部被修改时，自动重新加载（需要 Vim 焦点）
+set autoread
+
+" 设置 wildmenu，在命令行补全时显示匹配列表
+set wildmenu
+set wildmode=longest:full,full
+
+" 启用文件类型检测，并加载对应的插件和缩进文件
+filetype plugin indent on
+
+" 设置更新时间（单位：毫秒），用于 swap 文件写入和触发 CursorHold 事件
+set updatetime=300
+
+" 光标停止移动一段时间后触发 CursorHold 事件（可用于某些插件）
+" autocmd CursorHold * echo "CursorHold triggered"
+
+" 设置 diff 模式下的一些选项，使其更易用
+if &diff
+    set diffopt+=iwhite " 忽略空白字符差异
+    set diffopt+=filler " 显示填充行以对齐
+    set diffopt+=vertical " 优先垂直分割
+endif
+
+" 针对特定文件类型的设置示例
+" autocmd FileType python setlocal shiftwidth=4 tabstop=4 softtabstop=4 expandtab
+" autocmd FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+" autocmd FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+" autocmd FileType markdown setlocal wrap linebreak nolist
+
+" 启用代码格式化插件（需要安装如 vim-fmt 或 neoformat，并配置格式化工具）
+" " neoformat 示例
+" autocmd BufWritePre *.py Neoformat " 保存 Python 文件前自动格式化
+" autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Neoformat " 保存 JS/TS 文件前自动格式化
+" nnoremap <leader>fm :Neoformat<CR> " 手动格式化快捷键
